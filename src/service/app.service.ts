@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AwsHelperService } from './aws/awsHelper.service';
+import { DynamoHelperService } from './aws/awsHelper.service';
 
 
 const { DynamoDBClient, ListTablesCommand } = require("@aws-sdk/client-dynamodb");
@@ -13,15 +13,5 @@ export class AppService {
     return "hello world";
   }
 
-  async getTables(): Promise<any>{
-
- 
-      const client = new DynamoDBClient({ region: "us-east-1" });
-      const command = new ListTablesCommand({});
-      const results =  await client.send(command);
-
-        return results;
-     
-
-  }
+  
 }

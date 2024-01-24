@@ -1,7 +1,7 @@
 import { DynamoDBClient, ListTablesCommand } from '@aws-sdk/client-dynamodb';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User, UserPost } from 'src/models/models';
-import { AwsHelperService } from 'src/service/aws/awsHelper.service';
+import { DynamoHelperService } from 'src/service/aws/awsHelper.service';
 
 
 
@@ -13,7 +13,7 @@ export class DbService {
   async getUser(id: String): Promise<string> {
 
     //"USER012345"
-    const dynamoHelper = new AwsHelperService();
+    const dynamoHelper = new DynamoHelperService();
     const user = await dynamoHelper.awsGetUserInfo(id);
 
     if (!user) {
@@ -23,7 +23,7 @@ export class DbService {
   }
 
   async getUsers(): Promise<any>{
-     const dynamoHelper = new AwsHelperService();
+     const dynamoHelper = new DynamoHelperService();
      const users = await dynamoHelper.awsGetAllUsers();
 
      if (!users){
@@ -42,7 +42,7 @@ export class DbService {
 //     displayName: "JosephDoeson"
 //     }
 
-    const dynamoHelper = new AwsHelperService();
+    const dynamoHelper = new DynamoHelperService();
     const update = await dynamoHelper.awsUpdateUserInfo(user);
 
     return update;
@@ -52,7 +52,7 @@ export class DbService {
 
   async createUser(user: User): Promise<string> {
 
-    const dynamoHelper = new AwsHelperService();
+    const dynamoHelper = new DynamoHelperService();
     const create = await dynamoHelper.awsCreateUser(user);
 
     return create;
@@ -60,7 +60,7 @@ export class DbService {
 
   async createPost(post: UserPost): Promise<string> {
 
-    const dynamoHelper = new AwsHelperService();
+    const dynamoHelper = new DynamoHelperService();
     const create = await dynamoHelper.awsCreatePost(post);
 
     return create;
