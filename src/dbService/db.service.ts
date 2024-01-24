@@ -9,7 +9,12 @@ import { DynamoHelperService } from 'src/service/aws/dynamoHelper.service';
 
 @Injectable()
 export class DbService {
-  [x: string]: any;
+  
+  dynamoHelper: DynamoHelperService;
+  constructor(){
+    this.dynamoHelper = new DynamoHelperService();
+  }
+
   async getUser(id: String): Promise<string> {
 
     //"USER012345"
