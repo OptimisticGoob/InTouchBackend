@@ -17,30 +17,23 @@ export class DbService {
     const user = await dynamoHelper.awsGetUserInfo(id);
 
     if (!user) {
-        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
     return user;
   }
 
-  async getUsers(): Promise<any>{
-     const dynamoHelper = new DynamoHelperService();
-     const users = await dynamoHelper.awsGetAllUsers();
+  async getUsers(): Promise<any> {
+    const dynamoHelper = new DynamoHelperService();
+    const users = await dynamoHelper.awsGetAllUsers();
 
-     if (!users){
-        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-     }
+    if (!users) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
 
-     return users;
+    return users;
   }
 
   async updateUser(user: User): Promise<string> {
-
-//    const user: User = 
-//    { 
-//     UserID: "USER012345",
-//     bio: "very nice bio describing a pleasant person",
-//     displayName: "JosephDoeson"
-//     }
 
     const dynamoHelper = new DynamoHelperService();
     const update = await dynamoHelper.awsUpdateUserInfo(user);

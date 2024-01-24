@@ -10,4 +10,4 @@ import { DynamoHelperService } from './service/aws/awsHelper.service';
   controllers: [AppController, DbController],
   providers: [AppService, DbService, DynamoHelperService],
 })
-export class AppModule {}
+export class AppModule { }

@@ -4,7 +4,7 @@ import { User, UserPost, UserUpdateInfo } from "src/models/models";
 import { createPostInput } from "src/util/util";
 
 @Injectable()
-export class AwsHelperService{
+export class DynamoHelperService {
 
     userTable = "Users";
     postTable = "Posts"
@@ -12,25 +12,25 @@ export class AwsHelperService{
     userPrimaryKey = "UserID"
     client: DynamoDBClient;
 
-    constructor(){
+    constructor() {
         this.client = new DynamoDBClient();
     }
 
-    async awsGetUserInfo(userID: String): Promise<any>{
+    async awsGetUserInfo(userID: String): Promise<any> {
         const command = new GetItemCommand(this.getUserQuery(userID));
-        const results =  await this.client.send(command);
+        const results = await this.client.send(command);
         return results.Item;
 
     }
 
-    async awsGetAllUsers(): Promise<any>{
-        const input = {Statement: `SELECT * FROM ${this.userTable}`}
+    async awsGetAllUsers(): Promise<any> {
+        const input = { Statement: `SELECT * FROM ${this.userTable}` }
         const command = new ExecuteStatementCommand(input);
         const results = await this.client.send(command)
         return results.Items;
     }
 
-    async awsUpdateUserInfo(user: User): Promise<any>{
+    async awsUpdateUserInfo(user: User): Promise<any> {
 
         const updateInfo: UserUpdateInfo = this.getUserUpdateAttributes(user)
 
@@ -42,13 +42,13 @@ export class AwsHelperService{
         }
 
         const command = new UpdateItemCommand(input);
-        const results =  await this.client.send(command);
+        const results = await this.client.send(command);
 
         console.log(this.getUserUpdateAttributes(user))
         return results;
     }
 
-    async awsCreateUser(user: User): Promise<any>{
+    async awsCreateUser(user: User): Promise<any> {
 
         const input = {
             Item: this.createUserInput(user),
@@ -63,7 +63,7 @@ export class AwsHelperService{
 
     }
 
-    async awsCreatePost(post: UserPost): Promise<any>{
+    async awsCreatePost(post: UserPost): Promise<any> {
 
         const input = {
             Item: createPostInput(post),
@@ -77,53 +77,53 @@ export class AwsHelperService{
 
     }
 
-    getUserUpdateAttributes(user: User){
-        let eav= {};
+    getUserUpdateAttributes(user: User) {
+        let eav = {};
         let updateExpressionValues = "SET "
-        let key = {UserID : { S: user.UserID}}
+        let key = { UserID: { S: user.UserID } }
 
 
-        for(var attributeName in user){
+        for (var attributeName in user) {
             if (
-                user[attributeName] && 
+                user[attributeName] &&
                 attributeName != this.userPrimaryKey
-                ){
-            eav[":"+attributeName] = { "S" : user[attributeName]}
-            updateExpressionValues += attributeName + " = " + ":"+attributeName+", "
+            ) {
+                eav[":" + attributeName] = { "S": user[attributeName] }
+                updateExpressionValues += attributeName + " = " + ":" + attributeName + ", "
             }
         }
-        return {updateAttributeValues: eav, updateExpression :updateExpressionValues.slice(0, -2), key: key };
+        return { updateAttributeValues: eav, updateExpression: updateExpressionValues.slice(0, -2), key: key };
     }
 
-    createUserInput(user: User){
+    createUserInput(user: User) {
 
-        let eav= {};
+        let eav = {};
 
-        for(var attributeName in user){
-            if (user[attributeName]){
-            eav[attributeName] = { "S" : user[attributeName]}
+        for (var attributeName in user) {
+            if (user[attributeName]) {
+                eav[attributeName] = { "S": user[attributeName] }
             }
         }
 
         return eav;
     }
 
-    getUserQuery(userId: String): any{
+    getUserQuery(userId: String): any {
         const userQuery = {
             Key: { UserID: { S: userId } },
             TableName: this.userTable
-          }; 
+        };
 
         return (userQuery)
     }
 
-    updateUserQuery(userId: String): any{
+    updateUserQuery(userId: String): any {
         const userQuery = {
             Key: { UserID: { S: userId } },
             TableName: this.userTable
-          }; 
+        };
 
         return (userQuery)
     }
-    
+
 }

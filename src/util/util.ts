@@ -23,17 +23,17 @@ export function createUserInput(user: User) {
 }
 
 
-export function createPostInput(post: UserPost){
-    let eav= {};
+export function createPostInput(post: UserPost) {
+    let eav = {};
 
-    eav["PostID"] = { "S" : post.PostID};
-    eav["UserID"] = { "S" : post.UserID};
-    eav["title"] = { "S" : post.title};
-    eav["body"] = { "S" : post.body};
-    eav["picture"] = { "S" : post.picture};
-    eav["likes"] = { "N" : post.likes};
-    eav["date"] = { "S" : post.date};
-    eav["tag"] = { "SS" : post.tag};
+    eav["PostID"] = { "S": post.PostID };
+    eav["UserID"] = { "S": post.UserID };
+    eav["title"] = { "S": post.title };
+    eav["body"] = { "S": post.body };
+    eav["picture"] = { "S": post.picture };
+    eav["likes"] = { "N": post.likes };
+    eav["date"] = { "S": post.date };
+    eav["tag"] = { "SS": post.tag };
 
     return eav;
 }

@@ -1,4 +1,4 @@
-export interface User{
+export interface User {
     UserID: string;
     bio?: string;
     displayName?: string;
@@ -9,13 +9,13 @@ export interface User{
     standing?: string;
 }
 
-export interface UserUpdateInfo{
+export interface UserUpdateInfo {
     updateAttributeValues: any;
     updateExpression: string;
     key: any;
 }
 
-export interface UserPost{
+export interface UserPost {
     UserID: string;
     PostID: string;
     title: string;
