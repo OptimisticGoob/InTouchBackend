@@ -1,7 +1,7 @@
 import { DynamoDBClient, ListTablesCommand } from '@aws-sdk/client-dynamodb';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User, UserPost } from 'src/models/models';
-import { DynamoHelperService } from 'src/service/aws/awsHelper.service';
+import { DynamoHelperService } from 'src/service/aws/dynamoHelper.service';
 
 
 

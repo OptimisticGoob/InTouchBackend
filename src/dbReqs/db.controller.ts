@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Put, Post, Body } from '@nestjs/common'
 import { DbService } from 'src/dbService/db.service';
 import { User, UserPost } from 'src/models/models';
-import { generateID } from 'src/util/util';
+import { createPostInput, generateID } from 'src/util/util';
 
 @Controller('db')
 export class DbController {
@@ -28,8 +28,8 @@ export class DbController {
 
     @Post('post')
     async addPost(@Body() postObject: UserPost): Promise<string> {
-        postObject.UserID = generateID("P");
-        return await this.dbService.createPostInput(postObject);
+        postObject.PostID = generateID("P");
+        return await JSON.stringify(createPostInput(postObject));
     }
 
 
@@ -37,12 +37,6 @@ export class DbController {
     async updateUser(@Body() userObject: User): Promise<String> {
         return await this.dbService.updateUser(userObject)
     }
-
-    // @Put('test')
-    // async test(): Promise<String> {
-    //     return await this.dbService.updateUser();
-    // }
-
 
 
 }

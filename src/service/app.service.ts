@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DynamoHelperService } from './aws/awsHelper.service';
+import { DynamoHelperService } from './aws/dynamoHelper.service';
 
 
 const { DynamoDBClient, ListTablesCommand } = require("@aws-sdk/client-dynamodb");

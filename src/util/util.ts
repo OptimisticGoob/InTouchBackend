@@ -1,9 +1,9 @@
 import { User, UserPost } from "src/models/models";
+import {v4 as uuidv4} from 'uuid';
 
 export function generateID(prefix: string): string {
-    crypto = require("crypto");
     let result = prefix;
-    const uuid = require("uuid");
+    let uuid = uuidv4();
     result = result + uuid
 
     return result
