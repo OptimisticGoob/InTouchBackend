@@ -15,13 +15,13 @@ export interface UserUpdateInfo{
     key: any;
 }
 
-export interface Post{
+export interface UserPost{
     UserID: string;
     PostID: string;
     title: string;
     body: string;
     picture: string;
     likes: number;
-    date: Date;
+    date: string;
     tag?: string[];
 }

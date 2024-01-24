@@ -1,8 +1,8 @@
-import { Post, User } from "src/models/models";
+import { User, UserPost } from "src/models/models";
 
-export function generateUserID(): string {
+export function generateID(prefix: string): string {
     crypto = require("crypto");
-    let result = "U";
+    let result = prefix;
     const uuid = require("uuid");
     result = result + uuid
 
@@ -23,23 +23,17 @@ export function createUserInput(user: User) {
 }
 
 
-export function createPostInput(post: Post){
-
-
-    const typeMap = new Map<string, string>([
-        ["string", "S"]
-    ]);
-
-
+export function createPostInput(post: UserPost){
     let eav= {};
 
-
-    for(var attributeName in post){
-        if (post[attributeName]){
-         let dynamoType = typeMap.get(post[attributeName]);
-        eav[attributeName] = { dynamoType : post[attributeName]}
-        }
-    }
+    eav["PostID"] = { "S" : post.PostID};
+    eav["UserID"] = { "S" : post.UserID};
+    eav["title"] = { "S" : post.title};
+    eav["body"] = { "S" : post.body};
+    eav["picture"] = { "S" : post.picture};
+    eav["likes"] = { "N" : post.likes};
+    eav["date"] = { "S" : post.date};
+    eav["tag"] = { "SS" : post.tag};
 
     return eav;
 }

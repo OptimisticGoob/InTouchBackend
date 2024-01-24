@@ -1,11 +1,14 @@
 import { DynamoDBClient, GetItemCommand, ExecuteStatementCommand, UpdateItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { Injectable } from "@nestjs/common";
-import { User, UserUpdateInfo } from "src/models/models";
+import { User, UserPost, UserUpdateInfo } from "src/models/models";
+import { createPostInput } from "src/util/util";
 
 @Injectable()
 export class AwsHelperService{
 
     userTable = "Users";
+    postTable = "Posts"
+    postPrimaryKey = "PostID"
     userPrimaryKey = "UserID"
     client: DynamoDBClient;
 
@@ -53,8 +56,24 @@ export class AwsHelperService{
         }
 
 
-        const command = new PutItemCommand(input)
-        const response = await this.client.send(command)
+        const command = new PutItemCommand(input);
+        const response = await this.client.send(command);
+
+        return response;
+
+    }
+
+    async awsCreatePost(post: UserPost): Promise<any>{
+
+        const input = {
+            Item: createPostInput(post),
+            TableName: this.postTable
+        }
+
+
+        const command = new PutItemCommand(input);
+        const response = await this.client.send(command);
+        return response;
 
     }
 

@@ -1,6 +1,6 @@
 import { DynamoDBClient, ListTablesCommand } from '@aws-sdk/client-dynamodb';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { User } from 'src/models/models';
+import { User, UserPost } from 'src/models/models';
 import { AwsHelperService } from 'src/service/aws/awsHelper.service';
 
 
@@ -9,6 +9,7 @@ import { AwsHelperService } from 'src/service/aws/awsHelper.service';
 
 @Injectable()
 export class DbService {
+  [x: string]: any;
   async getUser(id: String): Promise<string> {
 
     //"USER012345"
@@ -53,6 +54,14 @@ export class DbService {
 
     const dynamoHelper = new AwsHelperService();
     const create = await dynamoHelper.awsCreateUser(user);
+
+    return create;
+  }
+
+  async createPost(post: UserPost): Promise<string> {
+
+    const dynamoHelper = new AwsHelperService();
+    const create = await dynamoHelper.awsCreatePost(post);
 
     return create;
   }
