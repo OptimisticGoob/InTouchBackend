@@ -21,7 +21,7 @@ export interface UserPost {
     title: string;
     body: string;
     picture: string;
-    likes: number;
+    likes: string;
     date: string;
     tag?: string[];
 }

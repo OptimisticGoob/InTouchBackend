@@ -26,17 +26,16 @@ export class DbController {
         return await this.dbService.createUser(userObject);
     }
 
-    @Post('post')
-    async addPost(@Body() postObject: UserPost): Promise<string> {
-        postObject.PostID = generateID("P");
-        return await JSON.stringify(createPostInput(postObject));
-    }
-
-
     @Put('user')
     async updateUser(@Body() userObject: User): Promise<String> {
         return await this.dbService.updateUser(userObject)
     }
 
 
+    @Post('post')
+    async addPost(@Body() postObject: UserPost): Promise<string> {
+        postObject.PostID = generateID("P");
+        postObject.date = new Date().toString();    
+        return await this.dbService.createPost(postObject);
+    }
 }
