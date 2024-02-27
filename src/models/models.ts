@@ -2,8 +2,8 @@ export interface User {
     UserID: string;
     bio?: string;
     displayName?: string;
-    email?: string;
-    phash?: string;
+    email: string;
+    phash: string;
     phone?: string;
     picture?: string;
     standing?: string;
