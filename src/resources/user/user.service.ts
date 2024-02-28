@@ -1,10 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { v4 as uuid } from 'uuid';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
 
 import { dynamoDBClient } from 'src/aws-config/dynamodbClient';
+import { IUser } from './entities/user.entity';
+import { DynamoDB } from 'aws-sdk';
 
 const USERS_TABLE="users"
 @Injectable()
@@ -38,6 +42,107 @@ export class UserService {
     
       return results.Items;
   }
+
+// async findOneByEmail(email: string) {
+
+//   const results = await dynamoDBClient()
+//   .scan({
+//     TableName: USERS_TABLE,
+//   }) .promise();
+
+//   const users = results.Items;
+//   const user = users.filter( user => user.email === email)[0]
+//   return user;
+
+//   }
+
+  async findOneByEmail(email: string) {
+    const params: DynamoDB.DocumentClient.ScanInput = {
+      TableName: USERS_TABLE,
+      FilterExpression: "#email =  :email",
+      ExpressionAttributeNames: {
+          '#email': "email",
+      },
+      ExpressionAttributeValues: {
+        ":email": email,
+      }
+  };
+
+  try {
+      const data = await dynamoDBClient().scan(params).promise();
+      return data.Items[0];
+  } catch (error) {
+      console.error('Unable to scan user by email:', error);
+      return null;
+  }
+  }
+  
+  async findOneByUserName(name: string) {
+    const params: DynamoDB.DocumentClient.ScanInput = {
+      TableName: USERS_TABLE,
+      FilterExpression: "#name =  :name",
+      ExpressionAttributeNames: {
+          '#name': "name",
+      },
+      ExpressionAttributeValues: {
+        ":name": name,
+      }
+  };
+  
+
+  try {
+      const data = await dynamoDBClient().scan(params).promise();
+      return data.Items[0];
+  } catch (error) {
+      console.error('Unable to scan user by email:', error);
+      return null;
+  }
+  }
+
+  async addFriend(userID: string, friendID: string) {
+
+    try {
+      const updateParams: DocumentClient.UpdateItemInput = {
+        TableName: USERS_TABLE,
+        Key: {  userID: userID },
+        UpdateExpression: 'ADD friends :friendIdSet',
+        ConditionExpression: 'attribute_exists(userID)',
+        ExpressionAttributeValues: {
+          ':friendIdSet': dynamoDBClient().createSet([friendID])
+        },
+        ReturnValues: 'NONE'
+      };
+  
+      await dynamoDBClient().update(updateParams).promise();
+      console.log('friend added successfully.');
+    } catch (error) {
+      console.error('Error adding friend:', error);
+      throw error;
+    }
+  }
+
+  async addPost(userID: string, postID: string) {
+
+    try {
+      const updateParams: DocumentClient.UpdateItemInput = {
+        TableName: USERS_TABLE,
+        Key: {  userID: userID },
+        UpdateExpression: 'ADD posts :postIdSet',
+        ConditionExpression: 'attribute_exists(userID)',
+        ExpressionAttributeValues: {
+          ':postIdSet': dynamoDBClient().createSet([postID])
+        },
+        ReturnValues: 'NONE'
+      };
+  
+      await dynamoDBClient().update(updateParams).promise();
+      console.log('post added successfully.');
+    } catch (error) {
+      console.error('Error adding post:', error);
+      throw error;
+    }
+  }
+  
 
  async findOne(userID: string) {
     const result = await dynamoDBClient()

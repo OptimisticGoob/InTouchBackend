@@ -1,50 +1,51 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreatePostDto } from './create-post.dto';
 import { IsArray, IsDate, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdatePostDto extends PartialType(CreatePostDto) {
     
+    @ApiProperty()
     @IsString()
-    @IsOptional()
     postID: string;
 
+    @ApiProperty()
     @IsString()
-    @IsOptional()
     userID: string;
 
+    @ApiProperty()
     @IsDate()
     @IsString()
-    @IsOptional()
     creationdate: string;
 
+    @ApiProperty()
     @IsDate()
     @IsString()
-    @IsOptional()
     eventdate: string;
 
+    @ApiProperty()
     @IsString()
-    @IsOptional()
     username: string;
 
+    @ApiProperty()
     @IsString()
-    @IsOptional()
     description: string;
 
+    @ApiProperty()
     @IsString()
-    @IsOptional()
     location: string;
 
+    @ApiProperty()
     @IsString()
-    @IsOptional()
     title: string;
 
+    @ApiProperty()
     @IsArray()
-    @IsOptional()
     @IsString({ each: true })
     attendees: string[];
 
+    @ApiProperty()
     @IsArray()
-    @IsOptional()
     @IsString({ each: true })
     likes: string[];
 

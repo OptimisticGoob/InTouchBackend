@@ -7,6 +7,7 @@ import { UpdateFeedDto } from './dto/update-feed.dto';
 export class FeedController {
   constructor(private readonly feedService: FeedService) {}
 
+  @HttpCode(201)
   @Post()
   async create(@Body() createFeedDto: CreateFeedDto) {
     return this.feedService.create(createFeedDto);

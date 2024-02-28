@@ -1,21 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
-
-
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { dynamoDBClient } from 'src/aws-config/dynamodbClient';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { UserService } from '../user/user.service';
 
 const POSTS_TABLE="posts"
 @Injectable()
 export class PostService {
+
+  constructor(
+    private usersService: UserService,
+  ){}
   async create(createPostDto: CreatePostDto) {
+
+    const newid = uuid();
     return await dynamoDBClient()
     .put(
       {
         TableName: POSTS_TABLE,
         Item :{
-          postID: uuid(),
+          postID: newid,
           userID: createPostDto.userID,
           creationdate: new Date().toISOString(),
           username: createPostDto.username,
@@ -27,7 +33,11 @@ export class PostService {
           
         }
       }
-    ).promise();
+    ).promise().then(()=> {
+      this.usersService.addPost(createPostDto.userID, newid)
+    });
+
+
   }
 
   async findAll() {
@@ -48,6 +58,57 @@ export class PostService {
 
       return result.Item;
   }
+
+
+ async likePost(postID: string, userID: string) {
+
+  try {
+    const updateParams: DocumentClient.UpdateItemInput = {
+      TableName: POSTS_TABLE,
+      Key: { postID: postID },
+      UpdateExpression: 'ADD likes :userIdSet',
+      ConditionExpression: 'attribute_exists(postID)',
+      ExpressionAttributeValues: {
+        ':userIdSet': dynamoDBClient().createSet([userID])
+      },
+      ReturnValues: 'NONE'
+    };
+
+    await dynamoDBClient().update(updateParams).promise();
+    console.log('Post liked successfully.');
+  } catch (error) {
+    console.error('Error liking post:', error);
+    throw error;
+  }
+
+
+}
+
+async unlikePost(postID: string, userID: string) {
+
+  try {
+    const updateParams: DocumentClient.UpdateItemInput = {
+      TableName: POSTS_TABLE,
+      Key: { postID: postID },
+      UpdateExpression: 'delete likes :userIdSet',
+      ConditionExpression: 'attribute_exists(postID)  AND contains(likes, :userID)',
+      ExpressionAttributeValues: {
+        ':userIdSet': dynamoDBClient().createSet([userID])
+      },
+      ReturnValues: 'NONE'
+    };
+
+    await dynamoDBClient().update(updateParams).promise();
+    console.log('Post liked successfully.');
+  } catch (error) {
+    console.error('Error liking post:', error);
+    throw error;
+  }
+}
+
+
+
+
 
   async update(postID: string, updatePostDto: UpdatePostDto) {
     const query = generateUpdateExpression(updatePostDto);

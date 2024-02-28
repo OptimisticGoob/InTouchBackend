@@ -11,10 +11,13 @@ import { FeedController } from './resources/feed/feed.controller';
 import { FeedService } from './resources/feed/feed.service';
 import { UserModule } from './resources/user/user.module';
 import { AppService } from './service/app.service';
+import { AuthService } from './auth/auth.service';
+import { AuthModule } from './auth/auth.module';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
-  imports: [UserModule, PostModule, FeedModule],
-  controllers: [AppController, UserController, PostController, FeedController],
-  providers: [AppService, JwtService, UserService, PostService, FeedService],
+  imports: [UserModule, PostModule, FeedModule, AuthModule],
+  controllers: [AppController, UserController, PostController, FeedController, AuthController],
+  providers: [AppService, JwtService, UserService, PostService, FeedService, AuthService],
 })
 export class AppModule { }

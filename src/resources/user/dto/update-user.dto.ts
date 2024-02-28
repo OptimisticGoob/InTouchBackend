@@ -1,60 +1,51 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
 import { IsArray, IsEmail, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
 
-    
+    @ApiProperty()
     @IsString()
-    @IsOptional()
     name: string;
   
-    
+    @ApiProperty()
     @IsString()
-    @IsOptional()
     password: string;
   
-    
+    @ApiProperty()
     @IsEmail()
-    @IsOptional()
     email: string;
 
-    
+    @ApiProperty()
     @IsString()
-    @IsOptional()
     bio: string;
 
-    
+    @ApiProperty()
     @IsString()
-    @IsOptional()
     feed: string;
 
-    
+    @ApiProperty()
     @IsString()
-    @IsOptional()
     avatar: string;
 
-    
+    @ApiProperty()
     @IsArray()
-    @IsOptional()
     @IsString({each: true})
     following: string[];
 
-    
+    @ApiProperty()
     @IsArray()
-    @IsOptional()
     @IsString({each: true})
     followers: string[];
 
-    
+    @ApiProperty()
     @IsArray()
-    @IsOptional()
     @IsString({each: true})
     posts: string[];
 
-    
+    @ApiProperty()
     @IsArray()
-    @IsOptional()
     @IsString({each: true})
     liked: string[];
 

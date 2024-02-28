@@ -1,48 +1,62 @@
 import { IsOptional, IsString, IsArray, IsEmail } from 'class-validator';
+import { IUser } from '../entities/user.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateUserDto {
+export class CreateUserDto implements IUser {
 
+    @ApiProperty()
     @IsString()
     userID: string;
 
+    @ApiProperty()
     @IsString()
     name: string;
   
+    @ApiProperty()
     @IsString()
     password: string;
   
+    @ApiProperty()
     @IsEmail()
     email: string;
 
-    @IsString()
-    bio: string;
-
-    @IsString()
-    feed: string;
-
+    @ApiProperty()
     @IsString()
     @IsOptional()
-    avatar: string;
+    bio?: string;
 
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    feed?: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    avatar?: string;
+
+    @ApiProperty()
     @IsArray()
     @IsOptional()
     @IsString({each: true})
-    following: string[];
+    following?: string[];
 
+    @ApiProperty()
     @IsArray()
     @IsOptional()
     @IsString({each: true})
-    followers: string[];
+    followers?: string[];
 
+    @ApiProperty()
     @IsArray()
     @IsOptional()
     @IsString({each: true})
-    posts: string[];
+    posts?: string[];
 
+    @ApiProperty()
     @IsArray()
     @IsOptional()
     @IsString({each: true})
-    liked: string[];
-
+    liked?: string[];
 
 }
